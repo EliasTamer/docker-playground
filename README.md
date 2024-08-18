@@ -9,6 +9,6 @@ you can install docker desktop to visualize your images and your running contain
 
 # docker commands cheatsheet
 
-- build an image from a Dockerfile: docker build -t <image-name>
-- create a container and run a docker image with hot reload implemented: docker run -p 5173:5173 -v "$(pwd):/app" -v /app/node_modules <image-name>
-- list all docker images: docker images
+- build an image from a Dockerfile: <strong>docker build -t <image-name> </strong>
+- create a container and run a docker image with hot reload implemented: <strong>docker run -p 5173:5173 -v "$(pwd):/app" -v /app/node_modules <image-name> </strong>
+- list all docker images: <strong>docker images </strong>
