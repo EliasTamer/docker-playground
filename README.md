@@ -96,4 +96,4 @@ jobs:
 ```
 
 
-<strong> # secret variables need to be stored inside your github repository secrets (Settings -> Secrets and Variables -> Actions) <strong>
+<strong>secret variables need to be stored inside your github repository secrets (Settings -> Secrets and Variables -> Actions) <strong>
