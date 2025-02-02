@@ -57,10 +57,10 @@ on:
       - 'backend/**'
 
 env:
-  ACR_REGISTRY: myacr997.azurecr.io
+  ACR_REGISTRY: ACR-LOGIN-SERVER-HERE
   IMAGE_NAME: my-backend-image
-  APP_SERVICE_NAME: mybackend-app
-  RESOURCE_GROUP: my-acr-rg
+  APP_SERVICE_NAME: APP-SERVICE-NAME-HERE
+  RESOURCE_GROUP: RESROUCE-GROUP-NAME-HERE
 
 jobs:
   build-and-deploy:
@@ -95,3 +95,5 @@ jobs:
         images: ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 ```
 
+
+<strong> # secret variables need to be stored inside your github repository secrets (Settings -> Secrets and Variables -> Actions) <strong>
