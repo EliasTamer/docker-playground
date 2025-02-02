@@ -27,3 +27,71 @@ use the <strong> docker compose watch </strong> command to make sure that the co
 
 for extra information related to the configuration, check the <strong>compose.yml</strong> under the mern-docker full stack app.
 
+
+# creating CI/CD pipelines using github actions
+
+the pipeline will be triggered upon pushing my code to dev branch, you can configure this the way that you want.
+
+for this to work, you need to have the below:
+- Azure account
+- Azure subscription
+- Azure container registry service and an app service within the same resource group.
+
+the below CI/CI pipeline will execute the below commands:
+- login to your azure account
+- login to your azure container registry 
+- re-build and push your docker image to your azure container registry
+- deploy your updated docker image to your azure app service
+
+
+<strong>this needs to reside inside on the root of your project inside like this: .github/workflows/file-name.yml </strong>
+
+```
+name: Docker CI/CD to Azure
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'backend/**'
+
+env:
+  ACR_REGISTRY: myacr997.azurecr.io
+  IMAGE_NAME: my-backend-image
+  APP_SERVICE_NAME: mybackend-app
+  RESOURCE_GROUP: my-acr-rg
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
+
+    - name: Login to ACR
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.ACR_REGISTRY }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+
+    - name: Build and push Docker image
+      working-directory: ./backend
+      run: |
+        docker build -t ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:latest .
+        docker push ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+    - name: Deploy to Azure App Service
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.APP_SERVICE_NAME }}
+        images: ${{ env.ACR_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+```
+
